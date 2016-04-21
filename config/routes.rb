@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  use_doorkeeper
-
   get  'v1/api/notebooks/courses/:course/files/:file' => 'notey_noteys#base_file_exists'
   post 'v1/api/notebooks/courses/:course/files/:file' => 'notey_noteys#base_file_create'
 
