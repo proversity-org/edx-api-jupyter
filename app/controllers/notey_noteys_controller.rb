@@ -2,6 +2,7 @@ require 'net/http'
 require 'json'
 class NoteyNoteysController < ApplicationController
   include RailsApiAuth::Authentication
+  #before_action :authenticate!
   after_action :allow_iframe
 
   # Check if base file exists when creating xblock
@@ -34,11 +35,11 @@ class NoteyNoteysController < ApplicationController
 
   # file uri is of the form:
   #course_file_username.ipynb
-  # expect course_unit names to be unique to prevent collisions.
+  # expect course_unit names to be unique to prevent collisions.!?
 
   # Serve a user's notebook
   # GET 'v1/api/notebooks/users/courses/files/'
-  def user_file_exists
+  def serve_user_file
     course =  params["course"]
     file   =  params["file"]
     username = params["username"]
@@ -46,6 +47,10 @@ class NoteyNoteysController < ApplicationController
     uri = "#{course}_#{file}_#{username}.ipynb"
     puts "Checking if /home/jupyter/#{uri} exists"
     if File.exist?("/home/jupyter/#{uri}")
+      #uri = URI.parse(the_url)
+      #redirect_to uri.to_s
+      #rescue URI::InvalidURIError => encoding
+      #  redirect_to URI.encode(the_url)
       # url will be something we can pass into docker
       url = "http://localhost:8889/notebooks/#{uri}"
       redirect_to url
@@ -54,10 +59,39 @@ class NoteyNoteysController < ApplicationController
     end
   end
 
+  def user_file_exists
+    course =  notey_notey_params["course"]
+    file   =  notey_notey_params["file"]
+    username = notey_notey_params["username"]
+
+    uri = "/home/jupyter/#{course}_#{file}_#{username}.ipynb"
+    if File.exist?(uri)
+      render json: {"result":true}
+    else
+      render json: {"result":false}
+    end
+  end
+
+  # Ofcourse you must check that the base file exists first
   # Create a user's notebook
   # POST 'v1/api/notebooks/users/courses/files/'
   def user_file_create
-    render json: notey_notey_params
+    course =  notey_notey_params["course"]
+    file   =  notey_notey_params["file"]
+    username = notey_notey_params["username"]
+
+    # do some catching
+    base_file = "/home/jupyter/#{course}_#{file}.ipynb"
+    uri = "/home/jupyter/#{course}_#{file}_#{username}.ipynb"
+
+    File.open(base_file, "rb") do |input|
+        File.open(uri, "wb") do |output|
+          while buff = input.read(4096)
+            output.write(buff)
+          end
+        end
+      end
+    render json: true
   end
 
 

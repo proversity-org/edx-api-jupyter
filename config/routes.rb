@@ -4,7 +4,8 @@ Rails.application.routes.draw do
   get  'v1/api/notebooks/courses/files/' => 'notey_noteys#base_file_exists'
   post 'v1/api/notebooks/courses/files/' => 'notey_noteys#base_file_create'
 
-  get  'v1/api/notebooks/users/:username/courses/:course/files/:file' => 'notey_noteys#user_file_exists'
+  get  'v1/api/notebooks/users/:username/courses/:course/files/:file' => 'notey_noteys#serve_user_file'
+  get  'v1/api/notebooks/users/courses/files' => 'notey_notey#user_file_exists'
   post 'v1/api/notebooks/users/courses/files/' => 'notey_noteys#user_file_create'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
