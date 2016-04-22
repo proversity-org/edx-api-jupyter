@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
-  get  'v1/api/notebooks/courses/:course/files/:file' => 'notey_noteys#base_file_exists'
-  post 'v1/api/notebooks/courses/:course/files/:file' => 'notey_noteys#base_file_create'
+  resources :users, except: [:new, :edit]
+
+  get  'v1/api/notebooks/courses/files/' => 'notey_noteys#base_file_exists'
+  post 'v1/api/notebooks/courses/files/' => 'notey_noteys#base_file_create'
 
   get  'v1/api/notebooks/users/:username/courses/:course/files/:file' => 'notey_noteys#user_file_exists'
-  post 'v1/api/notebooks/users/:username/courses/:course/files/:file' => 'notey_noteys#user_file_create'
+  post 'v1/api/notebooks/users/courses/files/' => 'notey_noteys#user_file_create'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
