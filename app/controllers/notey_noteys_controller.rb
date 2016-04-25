@@ -10,7 +10,7 @@ class NoteyNoteysController < ApplicationController
   def base_file_exists
     course =  notey_notey_params["course"]
     file   =  notey_notey_params["file"]
-    uri = "/home/jupyter/#{course}_#{file}.ipynb"
+    uri = "/home/jupyter/#{course}_#{file}"
     if File.exist?(uri)
       render json: {"result":true}
     else
@@ -60,6 +60,7 @@ class NoteyNoteysController < ApplicationController
   end
 
   def user_file_exists
+    puts notey_notey_params
     course =  notey_notey_params["course"]
     file   =  notey_notey_params["file"]
     username = notey_notey_params["username"]
@@ -79,12 +80,13 @@ class NoteyNoteysController < ApplicationController
     course   = notey_notey_params["course"]
     file     = notey_notey_params["file"]
     username = notey_notey_params["username"]
-    content     = notey_notey_params["data"]
+    content  = notey_notey_params["data"]
 
     uri = "/home/jupyter/#{username}_#{course}_#{file}"
 
     if content.empty?
-    File.open(base_file, "rb") do |input|
+      base_file = "/home/jupyter/#{course}_#{file}"
+      File.open(base_file, "rb") do |input|
         File.open(uri, "wb") do |output|
           while buff = input.read(4096)
             output.write(buff)
