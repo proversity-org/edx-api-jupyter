@@ -40,11 +40,11 @@ class NoteyNoteysController < ApplicationController
   # Serve a user's notebook
   # GET 'v1/api/notebooks/users/courses/files/'
   def serve_user_file
-    course =  params["course"]
-    file   =  params["file"]
-    username = params["username"]
-
-    uri = "#{course}_#{file}_#{username}.ipynb"
+    course   =    params["course"]
+    file     =    params["file"]
+    username =    params["username"]
+    file_format = params[:format]
+    uri = "#{username}_#{course}_#{file}.#{file_format}"
     puts "Checking if /home/jupyter/#{uri} exists"
     if File.exist?("/home/jupyter/#{uri}")
       #uri = URI.parse(the_url)
@@ -81,7 +81,7 @@ class NoteyNoteysController < ApplicationController
     username = notey_notey_params["username"]
     content     = notey_notey_params["data"]
 
-    uri = "/home/jupyter/#{course}_#{file}_#{username}.ipynb"
+    uri = "/home/jupyter/#{username}_#{course}_#{file}"
 
     if content.empty?
     File.open(base_file, "rb") do |input|
