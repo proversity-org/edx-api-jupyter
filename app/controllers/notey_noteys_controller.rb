@@ -24,18 +24,14 @@ class NoteyNoteysController < ApplicationController
   def base_file_create
     course =  notey_notey_params["course"]
     file   =  notey_notey_params["file"]
-    data   =  notey_notey_params["payload"]
+    data   =  notey_notey_params["data"]
 
-    uri = "/home/jupyter/#{course}_#{file}.ipynb"
-    File.open(uri, "w+") do |f|
+    uri = "/home/jupyter/#{course}_#{file}"
+    File.open(uri, "wb") do |f|
       f.write(data)
     end
-    render json: true
+    render json: {"result":true}
   end
-
-  # file uri is of the form:
-  #course_file_username.ipynb
-  # expect course_unit names to be unique to prevent collisions.!?
 
   # Serve a user's notebook
   # GET 'v1/api/notebooks/users/courses/files/'
@@ -47,11 +43,6 @@ class NoteyNoteysController < ApplicationController
     uri = "#{username}_#{course}_#{file}.#{file_format}"
     puts "Checking if /home/jupyter/#{uri} exists"
     if File.exist?("/home/jupyter/#{uri}")
-      #uri = URI.parse(the_url)
-      #redirect_to uri.to_s
-      #rescue URI::InvalidURIError => encoding
-      #  redirect_to URI.encode(the_url)
-      # url will be something we can pass into docker
       url = "http://localhost:8889/notebooks/#{uri}"
       redirect_to url
     else
@@ -73,19 +64,18 @@ class NoteyNoteysController < ApplicationController
     end
   end
 
-  # Ofcourse you must check that the base file exists first
+
   # Create a user's notebook
   # POST 'v1/api/notebooks/users/courses/files/'
   def user_file_create
     course   = notey_notey_params["course"]
     file     = notey_notey_params["file"]
     username = notey_notey_params["username"]
-    content  = notey_notey_params["data"]
 
     uri = "/home/jupyter/#{username}_#{course}_#{file}"
+    base_file = "/home/jupyter/#{course}_#{file}"
 
-    if content.empty?
-      base_file = "/home/jupyter/#{course}_#{file}"
+    if File.exist?(base_file)
       File.open(base_file, "rb") do |input|
         File.open(uri, "wb") do |output|
           while buff = input.read(4096)
@@ -94,12 +84,9 @@ class NoteyNoteysController < ApplicationController
         end
       end
     else
-      File.open(uri, "wb") do |output|
-        output.write(content)
-      end
+      render json: {"result":false}
     end
-
-    render json: true
+      render json: {"result":true}
   end
 
 
