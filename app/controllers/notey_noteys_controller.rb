@@ -76,14 +76,14 @@ class NoteyNoteysController < ApplicationController
   # Create a user's notebook
   # POST 'v1/api/notebooks/users/courses/files/'
   def user_file_create
-    course =  notey_notey_params["course"]
-    file   =  notey_notey_params["file"]
+    course   = notey_notey_params["course"]
+    file     = notey_notey_params["file"]
     username = notey_notey_params["username"]
+    content     = notey_notey_params["data"]
 
-    # do some catching
-    base_file = "/home/jupyter/#{course}_#{file}.ipynb"
     uri = "/home/jupyter/#{course}_#{file}_#{username}.ipynb"
 
+    if content.empty?
     File.open(base_file, "rb") do |input|
         File.open(uri, "wb") do |output|
           while buff = input.read(4096)
@@ -91,6 +91,12 @@ class NoteyNoteysController < ApplicationController
           end
         end
       end
+    else
+      File.open(uri, "wb") do |output|
+        output.write(content)
+      end
+    end
+
     render json: true
   end
 

@@ -7,6 +7,6 @@ RailsApiAuth.tap do |raa|
 
   raa.edx_client_id       = '02513e0216be89d4be3e'
   raa.edx_client_secret   = '86598c27fb6b1cc90af7b1fa1ab68b27bc45b1d6'
-  raa.edx_redirect_uri = 'http://0.0.0.0:8000'
+  raa.edx_redirect_uri = ''
 
 end
