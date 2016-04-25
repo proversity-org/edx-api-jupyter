@@ -64,7 +64,7 @@ class NoteyNoteysController < ApplicationController
     file   =  notey_notey_params["file"]
     username = notey_notey_params["username"]
 
-    uri = "/home/jupyter/#{course}_#{file}_#{username}.ipynb"
+    uri = "/home/jupyter/#{username}_#{course}_#{file}"
     if File.exist?(uri)
       render json: {"result":true}
     else
