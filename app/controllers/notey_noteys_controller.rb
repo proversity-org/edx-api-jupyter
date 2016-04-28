@@ -2,7 +2,7 @@ require 'net/http'
 require 'json'
 class NoteyNoteysController < ApplicationController
   include RailsApiAuth::Authentication
-  #before_action :authenticate!
+  before_action :authenticate!
   after_action :allow_iframe
 
   # Check if base file exists when creating xblock
