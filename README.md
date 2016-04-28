@@ -1,4 +1,4 @@
-#### == SIFU
+#### SIFU
 ```text
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMM$OZ$7MMMMMMMMMMMMMMMN$$$MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
@@ -39,7 +39,7 @@ Sifu should run alongside jupyter notebook server in a docker image.
 
 Future changes to Sifu will include management of the notebook server itself,
 setting up remote synchronization between the docker file system where ephemeral
-copies of a user's notebook is stored, and a remote store such as Amazon S3.s
+copies of a user's notebook is stored, and a remote store such as Amazon S3.
 
 ###### Usage:
 
