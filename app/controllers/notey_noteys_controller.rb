@@ -2,7 +2,7 @@ require 'net/http'
 require 'json'
 class NoteyNoteysController < ApplicationController
   include RailsApiAuth::Authentication
-  before_action :authenticate!
+  before_action :change_querystring_to_header, only: [:serve_user_file], :authenticate!
   after_action :allow_iframe
 
   # Check if base file exists when creating xblock
@@ -102,6 +102,18 @@ class NoteyNoteysController < ApplicationController
   end
 
   private
+
+  # This method allows an iframe to include an authentication token
+  # in its request. This is strongly advised against in
+  # https://tools.ietf.org/html/rfc6750#section-2.2
+  # Rails Api Auth does not support this for good reason, so this is a work around.
+  # Note that in future there might be a way for us to add this header quietly
+  # via ajax to the iframe call.
+  def change_querystring_to_header
+    k = 'Authorization'
+    auth = request.query_parameters[k]
+    request.headers[k] = auth
+  end
 
    def allow_iframe
      response.headers['X-Frame-Options'] = 'ALLOW-FROM http://0.0.0.0:8000/'
