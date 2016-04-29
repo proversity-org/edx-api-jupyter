@@ -2,7 +2,8 @@ require 'net/http'
 require 'json'
 class NoteyNoteysController < ApplicationController
   include RailsApiAuth::Authentication
-  before_action :change_querystring_to_header, only: [:serve_user_file], :authenticate!
+  before_action :change_querystring_to_header, only: [:serve_user_file]
+  before_action :authenticate!
   after_action :allow_iframe
 
   # Check if base file exists when creating xblock
@@ -113,6 +114,7 @@ class NoteyNoteysController < ApplicationController
     k = 'Authorization'
     auth = request.query_parameters[k]
     request.headers[k] = auth
+    puts request.headers[k]
   end
 
    def allow_iframe
