@@ -58,6 +58,6 @@ POST 'v1/api/notebooks/users/courses/files/' # Create user notebook
 2. Manage jupyter server directly
 3. Manage remote store of notebooks
 4. Add support for deleting notebooks locally (and NB remotely)
-5. Integrate oAuth2 support
+5. ~~integrate oAuth2 support~~
 6. Prevent access to jupyter notebook through anything except Sifu
 7. Look at supporting multipart uploads to Sifu instead of current payload
