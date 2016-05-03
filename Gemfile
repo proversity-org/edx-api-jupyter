@@ -10,7 +10,7 @@ gem 'spring', :group => :development
 
 gem 'sqlite3'
 
-gem 'rails_api_auth', :path => "~/proversity/software/rails_api_auth/"
+gem 'rails_api_auth'
 
 gem 'rack-cors', :require => 'rack/cors'
 
