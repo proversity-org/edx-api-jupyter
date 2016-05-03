@@ -114,7 +114,6 @@ class NoteyNoteysController < ApplicationController
     k = 'Authorization'
     auth = request.query_parameters[k]
     request.headers[k] = auth
-    puts request.headers[k]
   end
 
    def allow_iframe
