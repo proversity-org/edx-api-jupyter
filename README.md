@@ -52,6 +52,11 @@ GET  'v1/api/notebooks/users/courses/files' # Check if user notebook exists
 POST 'v1/api/notebooks/users/courses/files/' # Create user notebook
 ```
 
+#### Run with Puma as production server
+```bash
+RAILS_ENV=production bundle exec puma -C /sifu/config/puma.rb /sifu/config.ru
+```
+
 ###### TODO
 
 1. Write tests for api calls
