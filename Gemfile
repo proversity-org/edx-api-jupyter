@@ -10,12 +10,13 @@ gem 'spring', :group => :development
 
 gem 'sqlite3'
 
-gem 'rails_api_auth'
+gem 'rails_api_auth', :git => 'https://github.com/proversity-org/rails_api_auth.git'
 
 gem 'rack-cors', :require => 'rack/cors'
 
-gem 'rack-proxy'
+gem 'rack'
 
+gem 'puma'
 # To use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

@@ -1,3 +1,12 @@
+GIT
+  remote: https://github.com/proversity-org/rails_api_auth.git
+  revision: 1473f65add5b987246e47a38ae56bafc95d09063
+  specs:
+    rails_api_auth (0.0.4)
+      bcrypt (~> 3.1.7)
+      httparty (~> 0.13.3)
+      rails (>= 3.2.6, < 5)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -60,10 +69,9 @@ GEM
     multi_xml (0.5.5)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
+    puma (3.4.0)
     rack (1.6.4)
     rack-cors (0.4.0)
-    rack-proxy (0.5.17)
-      rack
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.6)
@@ -88,10 +96,6 @@ GEM
       rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
-    rails_api_auth (0.0.5)
-      bcrypt (~> 3.1.7)
-      httparty (~> 0.13.3)
-      rails (>= 3.2.6, < 5)
     railties (4.2.6)
       actionpack (= 4.2.6)
       activesupport (= 4.2.6)
@@ -116,11 +120,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  puma
+  rack
   rack-cors
-  rack-proxy
   rails (= 4.2.6)
   rails-api
-  rails_api_auth
+  rails_api_auth!
   spring
   sqlite3
 
