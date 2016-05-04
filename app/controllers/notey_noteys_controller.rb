@@ -44,7 +44,7 @@ class NoteyNoteysController < ApplicationController
     uri = "#{username}_#{course}_#{file}.#{file_format}"
     puts "Checking if /home/jupyter/#{uri} exists"
     if File.exist?("/home/jupyter/#{uri}")
-      url = "http://localhost:8889/notebooks/#{uri}"
+      url = "http://#{ENV['DOCKER_IP']}:3335/notebooks/#{uri}"
       redirect_to url
     else
       render json: {"result":false}
