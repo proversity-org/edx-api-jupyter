@@ -11,7 +11,7 @@ class NoteyNoteysController < ApplicationController
   def base_file_exists
     course =  notey_notey_params["course"]
     file   =  notey_notey_params["file"]
-    uri = "/home/jupyter/#{course}_#{file}"
+    uri = "/notebooks/#{course}_#{file}"
     if File.exist?(uri)
       render json: {"result":true}
     else
@@ -27,7 +27,7 @@ class NoteyNoteysController < ApplicationController
     file   =  notey_notey_params["file"]
     data   =  notey_notey_params["data"]
 
-    uri = "/home/jupyter/#{course}_#{file}"
+    uri = "/notebooks/#{course}_#{file}"
     File.open(uri, "wb") do |f|
       f.write(data)
     end
@@ -42,8 +42,8 @@ class NoteyNoteysController < ApplicationController
     username =    params["username"]
     file_format = params[:format]
     uri = "#{username}_#{course}_#{file}.#{file_format}"
-    puts "Checking if /home/jupyter/#{uri} exists"
-    if File.exist?("/home/jupyter/#{uri}")
+    puts "Checking if /notebooks/#{uri} exists"
+    if File.exist?("/notebooks/#{uri}")
       url = "http://#{ENV['DOCKER_IP']}:3335/notebooks/#{uri}"
       redirect_to url
     else
@@ -57,7 +57,7 @@ class NoteyNoteysController < ApplicationController
     file   =  notey_notey_params["file"]
     username = notey_notey_params["username"]
 
-    uri = "/home/jupyter/#{username}_#{course}_#{file}"
+    uri = "/notebooks/#{username}_#{course}_#{file}"
     if File.exist?(uri)
       render json: {"result":true}
     else
@@ -73,8 +73,8 @@ class NoteyNoteysController < ApplicationController
     file     = notey_notey_params["file"]
     username = notey_notey_params["username"]
 
-    uri = "/home/jupyter/#{username}_#{course}_#{file}"
-    base_file = "/home/jupyter/#{course}_#{file}"
+    uri = "/notebooks/#{username}_#{course}_#{file}"
+    base_file = "/notebooks/#{course}_#{file}"
 
     if File.exist?(base_file)
       File.open(base_file, "rb") do |input|
