@@ -4,7 +4,7 @@ require 'json'
 class NoteyNoteysController < ApplicationController
 
   include RailsApiAuth::Authentication
-  before_action :change_querystring_to_header, only: [:serve_user_file]
+  before_action :change_query_string_to_header, only: [:serve_user_file]
   before_action :authenticate!
   after_action :allow_iframe
 
