@@ -1,6 +1,8 @@
 require 'net/http'
 require 'json'
+
 class NoteyNoteysController < ApplicationController
+
   include RailsApiAuth::Authentication
   before_action :change_querystring_to_header, only: [:serve_user_file]
   before_action :authenticate!
@@ -9,13 +11,13 @@ class NoteyNoteysController < ApplicationController
   # Check if base file exists when creating xblock
   # GET 'v1/api/notebooks/courses/files/'
   def base_file_exists
-    course =  notey_notey_params["course"]
-    file   =  notey_notey_params["file"]
+    course =  notey_notey_params['course']
+    file   =  notey_notey_params['file']
     uri = "/notebooks/#{course}_#{file}"
     if File.exist?(uri)
-      render json: {"result":true}
+      render json: { result: true }
     else
-      render json: {"result":false}
+      render json: { result: false }
     end
   end
 
@@ -23,74 +25,75 @@ class NoteyNoteysController < ApplicationController
   # check if ruby allows you to lock the file
   # POST 'v1/api/notebooks/courses/files/'
   def base_file_create
-    course =  notey_notey_params["course"]
-    file   =  notey_notey_params["file"]
-    data   =  notey_notey_params["data"]
+    course =  notey_notey_params['course']
+    file   =  notey_notey_params['file']
+    data   =  notey_notey_params['data']
 
     uri = "/notebooks/#{course}_#{file}"
-    File.open(uri, "wb") do |f|
+    File.open(uri, 'wb') do |f|
       f.write(data)
     end
-    render json: {"result":true}
+    render json: { result: true }
   end
 
   # Serve a user's notebook
   # GET 'v1/api/notebooks/users/courses/files/'
+  # rubocop:disable MethodLength
   def serve_user_file
-    course   =    params["course"]
-    file     =    params["file"]
-    username =    params["username"]
+    course   =    params['course']
+    file     =    params['file']
+    username =    params['username']
     file_format = params[:format]
     uri = "#{username}_#{course}_#{file}.#{file_format}"
-    puts "Checking if /notebooks/#{uri} exists"
+    # puts "Checking if /notebooks/#{uri} exists" -- to rails logger!
     if File.exist?("/notebooks/#{uri}")
       url = "http://#{ENV['DOCKER_IP']}:3335/notebooks/#{uri}"
       redirect_to url
     else
-      render json: {"result":false}
+      render json: { result: false }
     end
   end
 
+  # rubocop:enable MethodLength
   def user_file_exists
-    puts notey_notey_params
-    course =  notey_notey_params["course"]
-    file   =  notey_notey_params["file"]
-    username = notey_notey_params["username"]
+    course =  notey_notey_params['course']
+    file   =  notey_notey_params['file']
+    username = notey_notey_params['username']
 
     uri = "/notebooks/#{username}_#{course}_#{file}"
     if File.exist?(uri)
-      render json: {"result":true}
+      render json: { result: true }
     else
-      render json: {"result":false}
+      render json: { result: false }
     end
   end
 
-
   # Create a user's notebook
   # POST 'v1/api/notebooks/users/courses/files/'
+  # rubocop:disable MethodLength
   def user_file_create
-    course   = notey_notey_params["course"]
-    file     = notey_notey_params["file"]
-    username = notey_notey_params["username"]
+    course   = notey_notey_params['course']
+    file     = notey_notey_params['file']
+    username = notey_notey_params['username']
 
     uri = "/notebooks/#{username}_#{course}_#{file}"
     base_file = "/notebooks/#{course}_#{file}"
 
     if File.exist?(base_file)
-      File.open(base_file, "rb") do |input|
-        File.open(uri, "wb") do |output|
-          while buff = input.read(4096)
+      File.open(base_file, 'rb') do |input|
+        File.open(uri, 'wb') do |output|
+          while (buff = input.read(4096))
             output.write(buff)
           end
         end
       end
     else
-      render json: {"result":false}
+      render json: { result: false }
     end
-      render json: {"result":true}
+    render json: { result: true }
   end
 
-
+  # rubocop:enable MethodLength
   # PATCH/PUT /notey_noteys/1
   # PATCH/PUT /notey_noteys/1.json
   def update
@@ -110,17 +113,19 @@ class NoteyNoteysController < ApplicationController
   # Rails Api Auth does not support this for good reason, so this is a work around.
   # Note that in future there might be a way for us to add this header quietly
   # via ajax to the iframe call.
-  def change_querystring_to_header
+
+  def allow_iframe
+    response.headers['X-Frame-Options'] = 'ALLOWALL' # 'ALLOW-FROM http://0.0.0.0:8000/'
+  end
+
+  def change_query_string_to_header
     k = 'Authorization'
     auth = request.query_parameters[k]
     request.headers[k] = auth
   end
 
-   def allow_iframe
-     response.headers['X-Frame-Options'] = 'ALLOW-FROM http://0.0.0.0:8000/'
-   end
+  def notey_notey_params
+    params[:notey_notey]
+  end
 
-    def notey_notey_params
-      params[:notey_notey]
-    end
 end

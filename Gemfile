@@ -2,29 +2,20 @@ source 'https://rubygems.org'
 
 
 gem 'rails', '4.2.6'
-
 gem 'rails-api'
-
 gem 'spring', :group => :development
 
 
 gem 'sqlite3'
-
 gem 'rails_api_auth', :git => 'https://github.com/proversity-org/rails_api_auth.git'
-
 gem 'rack-cors', :require => 'rack/cors'
-
 gem 'rack'
-
 gem 'puma'
-# To use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
 
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano', :group => :development
-
-# To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
+group :development do
+  gem 'appraisal'
+  gem 'rubocop'
+  gem 'guard-rubocop'
+  gem 'guard-rspec', require: false
+  gem 'guard-bundler', require: false
+end

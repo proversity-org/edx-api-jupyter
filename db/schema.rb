@@ -12,17 +12,15 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20150904110438) do
-
-  create_table "logins", force: :cascade do |t|
-    t.string   "identification",          null: false
-    t.string   "password_digest"
-    t.string   "oauth2_token",            null: false
-    t.string   "uid"
-    t.string   "single_use_oauth2_token"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "provider"
+  create_table 'logins', force: :cascade do |t|
+    t.string   'identification', null: false
+    t.string   'password_digest'
+    t.string   'oauth2_token', null: false
+    t.string   'uid'
+    t.string   'single_use_oauth2_token'
+    t.integer  'user_id'
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
+    t.string   'provider'
   end
-
 end
