@@ -7,11 +7,11 @@ development:
   <<: *default
   database: db/development.sqlite3
 
-productionlocal:
+productionlocal: &productionlocal
   <<: *default
   database: db/production.sqlite3
 
-productionrds:
+productionrds: &productionrds
   <<: *default
   database: <%= ENV['DB_NAME'] %>
   username: <%= ENV['RDS_USERNAME'] %>
