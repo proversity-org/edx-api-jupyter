@@ -17,10 +17,12 @@ test:
 # set env DB_NAME to db/production.sqlite3 if you want to use
 # local db
 production:
-  <<: *default
+  adapter: mysql
+  pool: 5
+  timeout: 5000
   encoding: utf8
   database: <%= ENV['DB_NAME'] %>
   username: <%= ENV['RDS_USERNAME'] %>
   password: <%= ENV['RDS_PASSWORD'] %>
-  host: <%= ENV['RDS_HOSTNAME'] %>
+  host: <%= ENV['RDS_HOSTNAME'] || 'localhost' %>
   port: <%= ENV['RDS_PORT'] %>
