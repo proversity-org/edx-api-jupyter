@@ -12,10 +12,7 @@ productionlocal:
   database: db/production.sqlite3
 
 productionrds:
-  adapter: mysql
-  pool: 5
-  timeout: 5000
-  encoding: utf8
+  <<: *default
   database: <%= ENV['DB_NAME'] %>
   username: <%= ENV['RDS_USERNAME'] %>
   password: <%= ENV['RDS_PASSWORD'] %>
