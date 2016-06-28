@@ -5,6 +5,7 @@ class NoteyNoteysController < ApplicationController
 
   include RailsApiAuth::Authentication
   before_action :change_query_string_to_header, only: [:serve_user_file]
+  before_action :check_same_user, only: [:serve_user_file]
   before_action :authenticate!
   after_action :allow_iframe
 
@@ -122,6 +123,14 @@ class NoteyNoteysController < ApplicationController
     k = 'Authorization'
     auth = request.query_parameters[k]
     request.headers[k] = auth
+  end
+
+  def check_same_user
+    # Also fetch the username from the Auth details
+    # check that the username retrieved macthes the
+    # username specified in the request
+    username = request.query_parameters['username']
+    auth = request.query_parameters['Authorization']
   end
 
   def notey_notey_params

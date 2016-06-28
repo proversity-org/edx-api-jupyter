@@ -11,6 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+# rubocop:disable all
 ActiveRecord::Schema.define(version: 20150904110438) do
 
   create_table "logins", force: :cascade do |t|
@@ -26,3 +27,4 @@ ActiveRecord::Schema.define(version: 20150904110438) do
   end
 
 end
+# rubocop:enable all
