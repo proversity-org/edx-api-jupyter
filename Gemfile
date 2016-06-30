@@ -7,7 +7,7 @@ gem 'spring', :group => :development
 
 
 gem 'sqlite3'
-gem 'rails_api_auth', :git => 'https://github.com/proversity-org/rails_api_auth.git'
+gem 'rails_api_auth', :git => 'https://github.com/simplabs/rails_api_auth.git'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'rack'
 gem 'puma'
