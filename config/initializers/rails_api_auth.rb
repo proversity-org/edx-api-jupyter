@@ -3,9 +3,9 @@ RailsApiAuth.tap do |raa|
 
   # Once sifu return a token, you will use that in all calls to his greatness
 
-  raa.edx_client_id      = 'cab1f254be91128c28a0'
-  raa.edx_client_secret  = 'b2113554b80620a20743b8e30514f8e23cbb66b8'
-  raa.edx_domain         = '0.0.0.0:8000' # actually get from environment variable
-  raa.edx_redirect_uri   = 'http://0.0.0.0:8000' # get from environment variable
-  raa.force_ssl          = false # actually get from environment variable
+  raa.edx_client_id      = ENV['EDX_OAUTH2_CLIENT_ID']
+  raa.edx_client_secret  = ENV['EDX_OAUTH2_CLIENT_SECRET']
+  raa.edx_domain         = ENV['EDX_HOSTNAME']
+  raa.edx_redirect_uri   = ENV['EDX_OAUTH2_CLIENT_REDIRECT_URI']
+  raa.force_ssl          = ENV['EDX_OAUTH2_FORCE_SSL']
 end
