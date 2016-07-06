@@ -7,5 +7,5 @@ RailsApiAuth.tap do |raa|
   raa.edx_client_secret  = ENV['EDX_OAUTH2_CLIENT_SECRET']
   raa.edx_domain         = ENV['EDX_HOSTNAME']
   raa.edx_redirect_uri   = ENV['EDX_OAUTH2_CLIENT_REDIRECT_URI']
-  raa.force_ssl          = true if ENV['EDX_OAUTH2_FORCE_SSL'].eql? 'true' else false
+  raa.force_ssl          = (ENV['EDX_OAUTH2_FORCE_SSL'].eql? 'true') ? true : false
 end
