@@ -1,8 +1,8 @@
 GIT
-  remote: https://github.com/proversity-org/rails_api_auth.git
-  revision: 1473f65add5b987246e47a38ae56bafc95d09063
+  remote: https://github.com/simplabs/rails_api_auth.git
+  revision: 08672fcfb07a667dbf8646360bb7f67aec58bf4a
   specs:
-    rails_api_auth (0.0.4)
+    rails_api_auth (0.0.6)
       bcrypt (~> 3.1.7)
       httparty (~> 0.13.3)
       rails (>= 3.2.6, < 5)

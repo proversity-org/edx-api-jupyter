@@ -108,27 +108,28 @@ class NoteyNoteysController < ApplicationController
 
   private
 
-  # This method allows an iframe to include an authentication token
-  # in its request. This is strongly advised against in
-  # https://tools.ietf.org/html/rfc6750#section-2.2
-  # Rails Api Auth does not support this for good reason, so this is a work around.
-  # Note that in future there might be a way for us to add this header quietly
-  # via ajax to the iframe call.
-
-  def allow_iframe
-    response.headers['X-Frame-Options'] = 'ALLOWALL' # 'ALLOW-FROM http://0.0.0.0:8000/'
-  end
-
+  ############################################################################
+  # This method allows an iframe to include an authentication token in its   #
+  # request. This is strongly advised against in                             #
+  # https://tools.ietf.org/html/rfc6750#section-2.2 Rails Api Auth does not  #
+  # support this for good reason, so this is a work around. In future there  #
+  # might be a way for us to add this header via ajax to the iframe call.    #
+  ############################################################################
   def change_query_string_to_header
     k = 'Authorization'
     auth = request.query_parameters[k]
     request.headers[k] = auth
   end
 
+  # !deprecated
+  def allow_iframe
+    response.headers['X-Frame-Options'] = 'ALLOWALL' # 'ALLOW-FROM http://0.0.0.0:8000/'
+  end
+
   def check_same_user
-    auth = request.query_parameters['Authorization'].split(" ")[1]
+    auth = request.query_parameters['Authorization'].split(' ')[1]
     user = Login.find_by(oauth2_token: auth)
-    render json: {}, status: :unauthorized  if ! user.uid.eql? params['username']
+    render json: {}, status: :unauthorized unless user.uid.eql? params['username']
   end
 
   def notey_notey_params
