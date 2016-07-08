@@ -126,11 +126,9 @@ class NoteyNoteysController < ApplicationController
   end
 
   def check_same_user
-    # Also fetch the username from the Auth details
-    # check that the username retrieved macthes the
-    # username specified in the request
-    username = request.query_parameters['username']
-    auth = request.query_parameters['Authorization']
+    auth = request.query_parameters['Authorization'].split(" ")[1]
+    user = Login.find_by(oauth2_token: auth)
+    render json: {}, status: :unauthorized  if ! user.uid.eql? params['username']
   end
 
   def notey_notey_params
