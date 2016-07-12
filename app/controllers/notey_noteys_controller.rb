@@ -54,8 +54,14 @@ class NoteyNoteysController < ApplicationController
       render json: { result: false }
     end
   end
-
   # rubocop:enable MethodLength
+
+  # Redirect all other authenticated requests to Jupyter.
+  # This is a catch all for routes that don't match Sifu's routes.
+  def authenticate_and_route_to_jupyter
+    redirect_to request.original_url 
+  end
+
   def user_file_exists
     course =  notey_notey_params['course']
     file   =  notey_notey_params['file']
