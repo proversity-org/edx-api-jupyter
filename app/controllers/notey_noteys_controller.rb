@@ -4,10 +4,11 @@ require 'json'
 class NoteyNoteysController < ApplicationController
 
   include RailsApiAuth::Authentication
-  before_action :change_cookie_to_header
+  before_action :change_cookie_to_header, except: [:set_cookie]
   before_action :check_same_user, only: [:serve_user_file]
   before_action :authenticate!
   after_action :allow_iframe, only: [:serve_user_file]
+  after_action :set_cookie_header, only: [:set_cookie]
 
   # Check if base file exists when creating xblock
   # GET 'v1/api/notebooks/courses/files/'
@@ -60,6 +61,10 @@ class NoteyNoteysController < ApplicationController
   # This is a catch all for routes that don't match Sifu's routes.
   def authenticate_and_route_to_jupyter
     redirect_to request.original_url 
+  end
+
+  def set_cookie
+   render json: { authorized: true } 
   end
 
   def user_file_exists
@@ -127,9 +132,13 @@ class NoteyNoteysController < ApplicationController
     response.headers.except! 'X-Frame-Options'
   end
 
+  def set_cookie_header
+    response.set_cookie 'sifu_authorization', {:value => "#{request.headers['Authorization']}", :path => "/"}
+  end
+
   def change_cookie_to_header
     auth = request.cookies['sifu_authorization']
-    request.headers['Authorization'] = auth unless auth.nil?
+    request.headers['Authorization'] = auth unless auth.blank?
   end
 
   def check_same_user
