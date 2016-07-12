@@ -4,10 +4,10 @@ require 'json'
 class NoteyNoteysController < ApplicationController
 
   include RailsApiAuth::Authentication
-  before_action :change_query_string_to_header, only: [:serve_user_file]
+  before_action :change_cookie_to_header
   before_action :check_same_user, only: [:serve_user_file]
   before_action :authenticate!
-  after_action :allow_iframe
+  after_action :allow_iframe, only: [:serve_user_file]
 
   # Check if base file exists when creating xblock
   # GET 'v1/api/notebooks/courses/files/'
@@ -108,28 +108,29 @@ class NoteyNoteysController < ApplicationController
 
   private
 
-  ############################################################################
-  # This method allows an iframe to include an authentication token in its   #
-  # request. This is strongly advised against in                             #
-  # https://tools.ietf.org/html/rfc6750#section-2.2 Rails Api Auth does not  #
-  # support this for good reason, so this is a work around. In future there  #
-  # might be a way for us to add this header via ajax to the iframe call.    #
-  ############################################################################
-  def change_query_string_to_header
-    k = 'Authorization'
-    auth = request.query_parameters[k]
-    request.headers[k] = auth
+  # This method allows an iframe to include an authentication token
+  # in its request. This is strongly advised against in
+  # https://tools.ietf.org/html/rfc6750#section-2.2
+  # Rails Api Auth does not support this for good reason, so this is a work around.
+  # Note that in future there might be a way for us to add this header quietly
+  # via ajax to the iframe call.
+
+  def allow_iframe
+    #response.headers['Access-Control-Allow-Origin'] = '*'
+    #response.headers['X-Frame-Options'] = 'ALLOWALL' # 'ALLOW-FROM http://0.0.0.0:8000/'
+    response.headers.except! 'X-Frame-Options'
   end
 
-  # !deprecated
-  def allow_iframe
-    response.headers['X-Frame-Options'] = 'ALLOWALL' # 'ALLOW-FROM http://0.0.0.0:8000/'
+  def change_cookie_to_header
+    auth = request.cookies['sifu_authorization']
+    request.headers['Authorization'] = auth unless auth.nil?
   end
 
   def check_same_user
-    auth = request.query_parameters['Authorization'].split(' ')[1]
+    auth = request.cookies['sifu_authorization'].split(' ')[1]
     user = Login.find_by(oauth2_token: auth)
-    render json: {}, status: :unauthorized unless user.uid.eql? params['username']
+    return render json: {"Message": "No authentication cookie detected."}, status: :unauthorized if user.nil?
+    render json: {}, status: :unauthorized  unless user.uid.eql? params['username']
   end
 
   def notey_notey_params
