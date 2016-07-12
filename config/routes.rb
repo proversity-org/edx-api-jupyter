@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   get  'v1/api/notebooks/users/courses/files' => 'notey_noteys#user_file_exists'
   post 'v1/api/notebooks/users/courses/files/' => 'notey_noteys#user_file_create'
 
-  match '*path' => 'notey_noteys#authenticate_and_route_to_jupyter', via: :all
+  match '*tree/*' => 'notey_noteys#authenticate_and_route_to_jupyter', via: :all
+  match '*notebooks/*' => 'notey_noteys#authenticate_and_route_to_jupyter', via: :all
+  match '*' => 'notey_noteys#authenticate_and_route_to_jupyter', via: :all
 
 end
