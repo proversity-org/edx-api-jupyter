@@ -49,7 +49,7 @@ class NoteyNoteysController < ApplicationController
     uri = "#{username}_#{course}_#{file}.#{file_format}"
     # puts "Checking if /notebooks/#{uri} exists" -- to rails logger!
     if File.exist?("/notebooks/#{uri}")
-      url = "http://#{ENV['DOCKER_IP']}:3335/notebooks/#{uri}"
+      url = "http://#{request.host}:3335/notebooks/#{uri}"
       redirect_to url
     else
       render json: { result: false }

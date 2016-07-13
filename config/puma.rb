@@ -12,7 +12,7 @@ environment ENV['RAILS_ENV'] || 'development'
 
 on_worker_boot do
   require 'active_record'
-  # ActiveRecord::Base.establish_connection
+  ActiveRecord::Base.establish_connection
 
   def disconnect
     ActiveRecord::Base.connection.disconnect!
@@ -20,5 +20,5 @@ on_worker_boot do
     ActiveRecord::ConnectionNotEstablished
   end
 
-  ActiveRecord::Base.establish_connection(YAML.load_file("#{app_dir}/config/database.yml")[Rails.env])
+  #ActiveRecord::Base.establish_connection(YAML.load_file("#{app_dir}/config/database.yml")[Rails.env])
 end

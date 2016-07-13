@@ -12,11 +12,13 @@ productionlocal: &productionlocal
   database: db/production.sqlite3
 
 productionrds: &productionrds
-  <<: *default
+  adapter: mysql2
+  pool: 5
+  timeout: 5000
   database: <%= ENV['RDS_DB_NAME'] %>
   username: <%= ENV['RDS_USERNAME'] %>
   password: <%= ENV['RDS_PASSWORD'] %>
-  host: <%= ENV['RDS_HOSTNAME'] || 'localhost' %>
+  host: <%= ENV['RDS_HOSTNAME'] %>
   port: <%= ENV['RDS_PORT'] %>
 
 # Warning: The database defined as "test" will be erased and
