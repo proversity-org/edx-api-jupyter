@@ -1,10 +1,15 @@
 require 'net/http'
 require 'json'
+require 'base64'
+require 'cgi'
+require 'openssl'
+require 'digest/sha1'
+require 'digest'
 
 class NoteyNoteysController < ApplicationController
 
   include RailsApiAuth::Authentication
-  before_action :change_cookie_to_header, except: [:set_cookie]
+  #before_action :change_cookie_to_header, except: [:set_cookie]
   before_action :check_same_user, only: [:serve_user_file]
   before_action :authenticate!
   after_action :allow_iframe, only: [:serve_user_file]
@@ -133,13 +138,22 @@ class NoteyNoteysController < ApplicationController
   end
 
   def set_cookie_header
-    response.set_cookie 'sifu_authorization', {:value => "#{request.headers['Authorization']}", :path => "/"}
+    key = 'some very secret string'
+    signature = signature = "#{Time.now.to_i}"
+    #hmac = OpenSSL::HMAC.digest('sha1',key, signature).each_byte.map { |b| b.to_s(16) }.join
+    response.set_cookie 'jupyter_authorization', {:value => "#{OpenSSL::HMAC.digest('sha1',key, signature).each_byte.map { |b| b.to_s(16) }.join}", :path => "/"}
+    response.set_cookie 'jupyter_timestamp', {:value => signature, :path => "/"}
+    response.cookies.delete(:sifu_authorization)
+    #response['set-cookie']="jupyter_authorization=#{Base64.encode64(OpenSSL::HMAC.digest('sha1',key, signature))}; path=/"
+    #response['set-cookie']="jupyter_timestamp=#{signature}; path=/"
+    #response.cookies['jupyter_authorization'] = "#{OpenSSL::HMAC.digest('sha1',key, signature)}; path=/"
+    #response.cookies['jupyter_timestamp'] = "#{signature}; path=/"
   end
 
-  def change_cookie_to_header
-    auth = request.cookies['sifu_authorization']
-    request.headers['Authorization'] = auth unless auth.blank?
-  end
+  #def change_cookie_to_header
+  #  auth = request.cookies['sifu_authorization']
+  #  request.headers['Authorization'] = auth unless auth.blank?
+  #end
 
   def check_same_user
     auth = request.cookies['sifu_authorization'].split(' ')[1]
